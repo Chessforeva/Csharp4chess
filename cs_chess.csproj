@@ -1,0 +1,189 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{49136010-DD33-4194-99A6-DE0318086C20}</ProjectGuid>
+    <ProjectTypeGuids>{A1591282-1198-4647-A2B1-27E5FF5F6F3B};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>cs_chess</RootNamespace>
+    <AssemblyName>cs_chess</AssemblyName>
+    <TargetFrameworkIdentifier>Silverlight</TargetFrameworkIdentifier>
+    <TargetFrameworkVersion>v5.0</TargetFrameworkVersion>
+    <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>
+    <SilverlightApplication>true</SilverlightApplication>
+    <SupportedCultures>
+    </SupportedCultures>
+    <XapOutputs>true</XapOutputs>
+    <GenerateSilverlightManifest>true</GenerateSilverlightManifest>
+    <XapFilename>cs_chess.xap</XapFilename>
+    <SilverlightManifestTemplate>Properties\AppManifest.xml</SilverlightManifestTemplate>
+    <SilverlightAppEntry>cs_chess.App</SilverlightAppEntry>
+    <TestPageFileName>cs_chessTestPage.html</TestPageFileName>
+    <CreateTestPage>true</CreateTestPage>
+    <ValidateXaml>true</ValidateXaml>
+    <EnableOutOfBrowser>false</EnableOutOfBrowser>
+    <OutOfBrowserSettingsFile>Properties\OutOfBrowserSettings.xml</OutOfBrowserSettingsFile>
+    <UsePlatformExtensions>false</UsePlatformExtensions>
+    <ThrowErrorsInValidation>true</ThrowErrorsInValidation>
+    <LinkedServerProject>
+    </LinkedServerProject>
+  </PropertyGroup>
+  <!-- This property group is only here to support building this project using the 
+       MSBuild 3.5 toolset. In order to work correctly with this older toolset, it needs 
+       to set the TargetFrameworkVersion to v3.5 -->
+  <PropertyGroup Condition="'$(MSBuildToolsVersion)' == '3.5'">
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>Bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;TRACE;SILVERLIGHT</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>Bin\Release</OutputPath>
+    <DefineConstants>TRACE;SILVERLIGHT</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="mscorlib" />
+    <Reference Include="System.Windows" />
+    <Reference Include="system" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Net" />
+    <Reference Include="System.Windows.Controls.Navigation, Version=5.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Windows.Browser" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Cuckoo\BitBoard.cs" />
+    <Compile Include="Cuckoo\Book.cs" />
+    <Compile Include="Cuckoo\ComputerPlayer.cs" />
+    <Compile Include="Cuckoo\Cuckoo.cs" />
+    <Compile Include="Cuckoo\Evaluate.cs" />
+    <Compile Include="Cuckoo\Game.cs" />
+    <Compile Include="Cuckoo\History.cs" />
+    <Compile Include="Cuckoo\HumanPlayer.cs" />
+    <Compile Include="Cuckoo\KillerTable.cs" />
+    <Compile Include="Cuckoo\LotsOfData.cs" />
+    <Compile Include="Cuckoo\Move.cs" />
+    <Compile Include="Cuckoo\MoveGen.cs" />
+    <Compile Include="Cuckoo\Piece.cs" />
+    <Compile Include="Cuckoo\Player.cs" />
+    <Compile Include="Cuckoo\Position.cs" />
+    <Compile Include="Cuckoo\Search.cs" />
+    <Compile Include="Cuckoo\TextIO.cs" />
+    <Compile Include="Cuckoo\TranspositionTable.cs" />
+    <Compile Include="Cuckoo\TwoReturnValues.cs" />
+    <Compile Include="Cuckoo\UndoInfo.cs" />
+    <Compile Include="GarboChess.cs" />
+    <Compile Include="Lousy\Attack.cs" />
+    <Compile Include="Lousy\BitBoard.cs" />
+    <Compile Include="Lousy\Board.cs" />
+    <Compile Include="Lousy\Constants.cs" />
+    <Compile Include="Lousy\Engine.cs" />
+    <Compile Include="Lousy\epd.cs" />
+    <Compile Include="Lousy\EvalTT.cs" />
+    <Compile Include="Lousy\Evaluator.cs" />
+    <Compile Include="Lousy\MagicMoves.cs" />
+    <Compile Include="Lousy\MoveGenerator.cs" />
+    <Compile Include="Lousy\My_Evaluator.cs" />
+    <Compile Include="Lousy\PawnsTT.cs" />
+    <Compile Include="Lousy\SearchMove.cs" />
+    <Compile Include="Lousy\TranspositionTable.cs" />
+    <Compile Include="OliThink.cs" />
+    <Compile Include="Valil\BlackBishop.cs" />
+    <Compile Include="Valil\BlackKing.cs" />
+    <Compile Include="Valil\BlackKnight.cs" />
+    <Compile Include="Valil\BlackPawn.cs" />
+    <Compile Include="Valil\BlackPiece.cs" />
+    <Compile Include="Valil\BlackQueen.cs" />
+    <Compile Include="Valil\BlackRook.cs" />
+    <Compile Include="Valil\Board.cs" />
+    <Compile Include="c0_chess.cs" />
+    <Compile Include="Valil\CastlingMove.cs" />
+    <Compile Include="Valil\ChessEngine.BoardEvaluation.cs" />
+    <Compile Include="Valil\ChessEngine.cs" />
+    <Compile Include="Valil\ChessEngine.MoveGeneration.cs" />
+    <Compile Include="Valil\ChessEngine.OpeningBook.cs" />
+    <Compile Include="Valil\ChessEngine.Search.cs" />
+    <Compile Include="Valil\EnPassantCaptureMove.cs" />
+    <Compile Include="Valil\Game.cs" />
+    <Compile Include="Valil\Interfaces.cs" />
+    <Compile Include="MainPage.xaml.cs">
+      <DependentUpon>MainPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Valil\Move.cs" />
+    <Compile Include="Valil\MoveEvents.cs" />
+    <Compile Include="Valil\MoveStructs.cs" />
+    <Compile Include="Valil\OBookMem.cs" />
+    <Compile Include="Valil\Piece.cs" />
+    <Compile Include="Valil\PromotionMove.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Valil\Utils.cs" />
+    <Compile Include="Valil\WhiteBishop.cs" />
+    <Compile Include="Valil\WhiteKing.cs" />
+    <Compile Include="Valil\WhiteKnight.cs" />
+    <Compile Include="Valil\WhitePawn.cs" />
+    <Compile Include="Valil\WhitePiece.cs" />
+    <Compile Include="Valil\WhiteQueen.cs" />
+    <Compile Include="Valil\WhiteRook.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </ApplicationDefinition>
+    <Page Include="MainPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\AppManifest.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Valil\valil_logo.JPG" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{A1591282-1198-4647-A2B1-27E5FF5F6F3B}">
+        <SilverlightProjectProperties />
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+</Project>
