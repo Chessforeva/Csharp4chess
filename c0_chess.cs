@@ -9,13 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Shapes;
+
 
 public class c0_chess
 {
@@ -47,6 +41,10 @@ public string c0_PG_1;
 
 public string[] c0_PGN_header = new String[20];
 
+public bool c0_PGN_short=false;
+public string c0_PG_sh="";
+
+
 public bool c0_errflag;
 
 public string PGN_text;					// PGN support, the game data will be here....
@@ -59,6 +57,7 @@ public c0_chess()
 {
 c0_Initvariables();
 // Show samples of chess logic in Log window...
+
 //c0_SAMPLES();
 }
 
@@ -111,7 +110,7 @@ public string Caps(string Str) { return Str.ToUpper(); }	// Uppercase
 public int Len(string s) { return s.Length; }
 public int InStr(string s, string s2) { return s.IndexOf(s2); }
 public string Str(int i) { return i.ToString(); }
-public void Log(string s) { System.Diagnostics.Debug.WriteLine(s); }
+public void Log(string s) { Console.WriteLine(s) /*System.Diagnostics.Debug.WriteLine(s)*/; }
 
 //----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Call this public to get samples working...
@@ -202,9 +201,16 @@ public void c0_SAMPLES()
     
 	Log("moves -> PGN (reverse action)");
 	Log( c0_put_to_PGN(mlist0) );
- 
+
+    if (c0_PGN_short)
+    {
+        Log("short:" + c0_PG_sh);
+        c0_short2list();
+        Log("short->moves (reverse):" + c0_moveslist);
+    }
  	c0_start_FEN="";
 	c0_set_start_position("");
+
    
 	// 3.Fischerrandom support test (ok):
 	Log("Fischer-random  PGN -> moves");
@@ -216,6 +222,14 @@ public void c0_SAMPLES()
 	Log("moves -> PGN (reverse action)");  
 	Log( c0_put_to_PGN(mlist3) );
 
+    if (c0_PGN_short)
+    {
+        Log("short:" + c0_PG_sh);
+        c0_set_FEN(c0_start_FEN);
+        c0_set_start_position("");
+        c0_short2list();
+        Log("short->moves (reverse):" + c0_moveslist);
+    }
 	// clear it all
 	c0_start_FEN="";
 	c0_set_start_position("");
@@ -1226,7 +1240,7 @@ while(true)
  
  buf2= c0_ReplaceAll( buf2,"'","" );
  buf2= c0_ReplaceAll( buf2,Chr(34),"" );
- buf2= c0_ReplaceAll( buf2,"–","-" );
+ buf2= c0_ReplaceAll( buf2,"ï¿½","-" );
   
  buf3=Caps(buf2);
 
@@ -1307,7 +1321,7 @@ while(true)
    at2=InStr(urls," ");
    if(at2>=0) urls=Mid(urls,0,at2);
 
-   str2=Mid(str2,0,at) + "<a href='" + urls + "' target='blank' >link»</a>" + Mid2(str2,at +Len(urls));
+   str2=Mid(str2,0,at) + "<a href='" + urls + "' target='blank' >linkï¿½</a>" + Mid2(str2,at +Len(urls));
    }
   else break;
 }
@@ -1350,6 +1364,9 @@ bool c0_1save_bLRockmoved, c0_1save_bRRockmoved, c0_1save_w00, c0_1save_b00;
 int c0_1save_sidemoves, c0_1save_lastmovepawn;
 
 f_error=false;
+
+c0_PG_sh="";
+
 gaj=1;
 move="";
 color7="w";
@@ -1551,6 +1568,8 @@ for(i=0;i<Len(str);i++)
 
 	if(Len(move2)>4 && Mid(move2,4,1)=="[") c0_become_from_engine=Mid(move2,5,1);
 	else c0_become_from_engine="Q";
+
+    if (c0_PGN_short) c0_PG_sh += c0_shortCode(1, move2);
 
 	if(c0_fischer) c0_fischer_cstl_move(move2,false);
 	else c0_moveto(from_move, to_move, false);
@@ -2669,5 +2688,154 @@ if( Len(c0_NMoves)>0 ) c0_retdata=c0_NMoves + c0_OName;
 
 return c0_retdata;
 }
+
+
+//--------------------------------------------------------------
+// Short notation encoding (internal for this libraries only)
+//--------------------------------------------------------------
+
+//------- Short notation move->code or code->move...
+public string c0_shortCode(int ch7, string P1)
+{
+
+  // Should sort position
+ string opos = c0_position;
+ string npos = "";
+
+ for (int V = 8; V>0; V--)
+    for (int H = 8; H>0; H--)
+    {
+        int i = opos.IndexOf(c0_convE2(V, H));
+        if (i > 0)
+        {
+            npos = opos.Substring(i - 2, 5) + npos;
+            opos = opos.Substring(0, i - 2) + Mid2(opos, i + 3);
+        }
+    }
+ c0_position = npos;
+
+ if(P1.IndexOf("*")>=0 || P1=="0") return P1;	// fischer-random castlings
+ 
+ string cDret="";
+ string cDp0 = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ123456789";
+ string cDp1="";
+ string cDp = c0_get_next_moves();
+ 
+ for(int c77=0;c77<cDp.Length;c77+=5)
+ {
+  string c7move=cDp.Substring(c77,4);
+  if( ( c0_position.Substring(c0_position.IndexOf(c7move.Substring(0,2))-1,1 )=="p" ) &&
+	 (("18").IndexOf( c7move.Substring(3,1) )>=0) )
+		{
+		cDp1+=c7move+"[Q]"+';'+c7move+"[R]"+';'+c7move+"[B]"+';'+c7move+"[N]"+';';
+		}
+  else cDp1+=c7move+"   ;";
+  if(cDp.Substring(c77+4,1)=="[") c77+=3;
+ }
+
+ if(ch7==1)
+	{
+	string cDcmp=P1;
+    if ((cDcmp.Length > 4) && (cDcmp.Substring(4, 3) == "[0]")) cDcmp = cDcmp.Substring(0, 4);
+    cDret = cDp0.Substring(cDp1.IndexOf(cDcmp) / 8, 1);
+	}
+ else if(ch7==-1)
+	{
+    string cDmove = cDp1.Substring((cDp0.IndexOf(P1)) * 8, 7);
+    c0_become_from_engine = cDmove.Substring(5,1);
+	if(c0_become_from_engine==" ") c0_become_from_engine="Q";
+	c0_become=c0_become_from_engine;
+    if (("Q ").IndexOf(cDmove.Substring(5,1)) >= 0) cDmove = cDmove.Substring(0, 4);
+	cDret=cDmove;
+	}
+
+ return cDret;
+}
+
+//------- Converts short notation to moveslist...
+public void c0_short2list()
+{
+c0_errflag=false;
+string c0_1save_position = c0_position;
+int c0_1save_sidemoves = c0_sidemoves;
+bool c0_1save_wKingmoved = c0_wKingmoved;
+bool c0_1save_bKingmoved = c0_bKingmoved;
+bool c0_1save_wLRockmoved = c0_wLRockmoved;
+bool c0_1save_wRRockmoved = c0_wRRockmoved;
+bool c0_1save_bLRockmoved = c0_bLRockmoved;
+bool c0_1save_bRRockmoved = c0_bRRockmoved;
+bool c0_1save_w00 = c0_w00;
+bool c0_1save_b00 = c0_b00;
+string c0_1save_become = c0_become;
+string c0_1save_become_from_engine = c0_become_from_engine;
+int c0_1save_lastmovepawn = c0_lastmovepawn;
+string c0_1save_moveslist = c0_moveslist;
+
+c0_moveslist = "";		// will contain moves on return...
+
+if( c0_start_FEN.Length>0 ) {
+	c0_set_FEN( c0_start_FEN );
+	if(c0_fischer)c0_fischer_adjustmoved(); }
+else
+{
+c0_position = "wpa2,wpb2,wpc2,wpd2,wpe2,wpf2,wpg2,wph2," +
+"wRa1,wNb1,wBc1,wQd1,wKe1,wBf1,wNg1,wRh1," +
+"bpa7,bpb7,bpc7,bpd7,bpe7,bpf7,bpg7,bph7," +
+"bRa8,bNb8,bBc8,bQd8,bKe8,bBf8,bNg8,bRh8,";
+
+c0_wKingmoved = false;
+c0_bKingmoved = false;
+c0_wLRockmoved = false;
+c0_wRRockmoved = false;
+c0_bLRockmoved = false;
+c0_bRRockmoved = false;
+c0_w00 = false;
+c0_b00 = false;
+
+c0_lastmovepawn = 0;
+c0_sidemoves=1;
+}
+
+c0_become="";
+c0_become_from_engine="";
+
+for( int c0_i7=0; c0_i7< c0_PG_sh.Length; c0_i7++)
+ {
+ string c0_move8=c0_shortCode(-1,c0_PG_sh.Substring(c0_i7,1));
+ string q = (c0_PG_sh+"   ").Substring(c0_i7,4);
+ if(q=="00**" || q=="000*") { 
+     c0_move8=q; c0_i7+=3; q="****"; }
+ if(c0_move8.Length<4) { c0_errflag=true; break; }
+
+ if(c0_fischer) { c0_fischer_cstl_move(c0_move8.Substring(0,4),true);
+  if(q=="****") c0_moveslist = c0_moveslist.Substring(0,c0_moveslist.Length-4)+c0_move8; }
+ else c0_moveto(c0_convH888(c0_move8.Substring(0,2)),c0_convH888(c0_move8.Substring(2,2)), true);
+ c0_sidemoves=-c0_sidemoves;
+}
+
+c0_position=c0_1save_position;
+c0_sidemoves=c0_1save_sidemoves;
+c0_wKingmoved=c0_1save_wKingmoved;
+c0_bKingmoved=c0_1save_bKingmoved;
+c0_wLRockmoved=c0_1save_wLRockmoved;
+c0_wRRockmoved=c0_1save_wRRockmoved;
+c0_bLRockmoved=c0_1save_bLRockmoved;
+c0_bRRockmoved=c0_1save_bRRockmoved;
+c0_w00=c0_1save_w00;
+c0_b00=c0_1save_b00;
+c0_become=c0_1save_become;
+c0_become_from_engine=c0_1save_become_from_engine;
+c0_lastmovepawn=c0_1save_lastmovepawn;
+//c0_moveslist=c0_1save_moveslist;
+
+//if(c0_errflag) alert("Can't parse encoded chess game ");
+
+if( c0_start_FEN.Length>0 )
+	{
+	c0_set_board_situation( c0_position, c0_wKingmoved, c0_wLRockmoved, c0_wRRockmoved, c0_w00, c0_bKingmoved, c0_bLRockmoved, c0_bRRockmoved, c0_b00, c0_lastmovepawn, c0_moveslist, c0_sidemoves );
+    }
+}
+
+
 
 }	// end of class
