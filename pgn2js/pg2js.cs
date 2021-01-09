@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -182,6 +182,8 @@ namespace pgn2js
                         g = g.ToUpper();
 
                         if (g.StartsWith("DATE ")) Out += ("[D_" + w + "]");
+                        if (g.StartsWith("SETUP ")) Out += ("[S_" + w + "]");
+                        if (g.StartsWith("FEN ")) Out += ("[F_" + w + "]");
                         if (g.StartsWith("ROUND ")) Out += ("[R_" + w + "]");
                         if (g.StartsWith("WHITE ")) Out += ("[W_" + w + "]");
                         if (g.StartsWith("BLACK ")) Out += ("[B_" + w + "]");

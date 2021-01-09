@@ -214,9 +214,23 @@ public void c0_SAMPLES()
    
 	// 3.Fischerrandom support test (ok):
 	Log("Fischer-random  PGN -> moves");
-	PGN3="[White Aronian, Levon][Black Rosa, Mike][Result 0:1][SetUp 1][FEN bbrkqnrn/pppppppp/8/8/8/8/PPPPPPPP/BBRKQNRN w GCgc - 0 0]";
-	PGN3 = PGN3 + "1. c4 e5 2. Nhg3 Nhg6 3. b3 f6 4. e3 b6 5. Qe2 Ne6 6. Qh5 Rh8 7. Nf5 Ne7 8. Qxe8+ Kxe8 9. N1g3 h5 10. Nxe7 Kxe7 11. d4 d6 12. h4 Kf7 13. d5 Nf8 14. f4 c6 15. fxe5 dxe5 16. e4 Bd6 17. Bd3 Ng6 18. O-O Nxh4 19. Be2 Ng6 20. Nf5 Bc5+ 21. Kh2 Nf4 22. Rc2 cxd5 23. exd5 h4 24. Bg4 Rce8 25. Bb2 g6 26. Nd4 exd4 27. Rxf4 Bd6  0-1";
-	mlist3= c0_get_moves_from_PGN(PGN3);
+	PGN3="[Event \"Champ Showdown 9LX 2020\"][Site \"lichess.org INT\"][Date \"2020.09.11\"]";
+	PGN3+="[Round \"1.5\"][White \"Vachier-Lagrave, Maxime\"][Black \"Carlsen, Magnus\"]";
+    PGN3+="[Result \"0-1\"][Variant \"Chess960\"][SetUp \"1\"]";
+    PGN3+="[FEN \"nnbrkqrb/pppppppp/8/8/8/8/PPPPPPPP/NNBRKQRB w GDgd - 0 1\"]";
+    PGN3+="[WhiteTitle \"GM\"][BlackTitle \"GM\"]";
+    PGN3+="[WhiteElo \"2778\"][BlackElo \"2863\"][EventDate \"2020.09.11\"]";
+	PGN3+="1. e4 c5 2. Nb3 b6 3. Qe2 g6 4. O-O Ba6 5. d3 Nc6 6. g3 Nc7 7. Nc3 Bxc3 8. bxc3 g5 ";
+	PGN3+="9. f4 gxf4 10. Bxf4 Ne6 11. e5 Qg7 12. Rde1 Rh8 13. Qh5 c4 14. Nc1 cxd3 15.cxd3 Qg6 ";
+    PGN3+="16. Qd1 h5 17. Re3 h4 18. Ne2 O-O-O 19. d4 Na5 20. Be4 Qg7 21. Rf2 Rdg8 22. Bg2 Bb7 ";
+	PGN3+="23. d5 Nxf4 24. Rxf4 hxg3 25. hxg3 Kb8 26. Qd3 Qh7 27. Qxh7 Rxh7 28.Nc1 Rc8 29. Nb3 Nc4 ";
+	PGN3+="30. Re2 e6 31. d6 Rg7 32. Bxb7 Kxb7 33. Kg2 Rg5 34. Rfe4 Ka6 35. g4 b5 36. a4 bxa4 ";
+	PGN3+="37. Ra2 a3 38. Nd2 Nxd2 39. Rxa3+ Kb6 40. Rb4+ Kc6 41.Ra6+ Kd5 42. Ra5+ Rc5 43. Rd4+ Kc6 ";
+	PGN3+="44. Rxa7 Nc4 45. Rc7+ Kb5 46. Rxd7 Nxe5 47.Rb7+ Kc6 48. Rc7+ Kb6 49. Rb4+ Rb5 50. Rxb5+ Kxb5 ";
+	PGN3+="51. d7 Nxd7 52. Rxd7 Rxg4+ 53.Kf3 f5 54. Re7 Re4 55. Rc7 Rc4 56. Re7 Rxc3+ 57. Kf4 Rc4+ ";
+	PGN3+="58. Kf3 Re4 59. Rc7 e5 60. Rc8 Rc4 61. Re8 Rf4+ 62. Kg3 Re4 63. Kf3 Kc5 ";
+	PGN3+="64. Ra8 Kd5 65. Ra5+ Ke6 66.Ra6+ Ke7 0-1";
+    mlist3= c0_get_moves_from_PGN(PGN3);
 	Log(mlist3);
 
 	Log("moves -> PGN (reverse action)");  
@@ -1240,7 +1254,7 @@ while(true)
  
  buf2= c0_ReplaceAll( buf2,"'","" );
  buf2= c0_ReplaceAll( buf2,Chr(34),"" );
- buf2= c0_ReplaceAll( buf2,"ï¿½","-" );
+ buf2= c0_ReplaceAll( buf2,"–","-" );
   
  buf3=Caps(buf2);
 
@@ -1321,7 +1335,7 @@ while(true)
    at2=InStr(urls," ");
    if(at2>=0) urls=Mid(urls,0,at2);
 
-   str2=Mid(str2,0,at) + "<a href='" + urls + "' target='blank' >linkï¿½</a>" + Mid2(str2,at +Len(urls));
+   str2=Mid(str2,0,at) + "<a href='" + urls + "' target='blank' >link»</a>" + Mid2(str2,at +Len(urls));
    }
   else break;
 }
@@ -2420,6 +2434,7 @@ if(Len(c0_king)>0 && Len(c0_rook)>0)
 		if(!(c0_king==c0_king2)) c0_position=c0_ReplaceAll(c0_position,c0_king,c0_king2);
 		if(!(c0_rook==c0_rook2)) c0_position=c0_ReplaceAll(c0_position,c0_rook,c0_rook2);
 		}
+    c0_lastmovepawn = 0;
 	}
 }
 
