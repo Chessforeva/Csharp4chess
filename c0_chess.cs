@@ -2531,7 +2531,7 @@ c0_NAGs = Ng1 + Ng2 + Ng3 + Ng4;
 }
 
 // public returns most played openings
-// Sample at http://chessforeva.appspot.com/C0_demo4.htm
+// Sample at https://chessforeva.gitlab.io/C0_demo4.htm
 
 public void c0_Openings_define()		// Just 30Kb of coded openings data...
 {
